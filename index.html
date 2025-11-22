@@ -1,0 +1,153 @@
+ <!DOCTYPE html>
+ <html lang="pt-br">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Aurora Semijoias</title>
+ </head>
+ <body>
+    <header>
+      <img src="imagens/aurora.png" alt="Logo Aurora Semijoias" class="logo">
+      <div>
+         <input type="text" id="campo-busca" placeholder="brincos, anéis, colares e etc..">
+         <button id="botao-busca" onclick="iniciarBusca()">Buscar</button>
+      </div>
+      <div id="cart-icon-container" onclick="toggleCart()">
+         <span id="cart-icon">🛒</span>
+         <span id="cart-counter">0</span>
+      </div>
+
+    </header> 
+     <main>
+      <section class="card-container">
+        <article>
+          <img src="imagens/oval.jpeg" alt="brinco oval banhado a ouro 18k">
+          <h2>Brinco Oval</h2>
+          <p> Autêntico. Banhado a ouro 18k.</p>
+          <p><strong>Preço:</strong> R$ 15,90</p>
+          <a href="Brinco-oval.html">Ver detalhes</a>
+        </article>
+        <article>
+          <img src="imagens/solitario.jpeg" alt="Anel Solitário banhado a ouro 18k">
+          <h2>Anel Solitário</h2>
+          <p>Um anel clássico e elegante, perfeito para todas as ocasiões. Banhado a ouro 18k e a prata 925.</p>
+          <p><strong>Preço:</strong> R$ 21,90</p>
+          <a href="anel-solitario.html">Ver detalhes</a>
+        </article>
+        <article>
+          <img src="imagens/organico.jpeg" alt="brinco orgânico">
+          <h2>Brinco organico</h2>
+          <p>Dispensa outras peças.</p>
+          <p><strong>Preço:</strong> R$ 15,90</p>
+          <a href="Brinco-organico.html">Ver detalhes</a>
+        </article>
+        <article>
+          <img src="imagens/laminado.jpeg" alt="Colar Laminado">
+          <h2>Colar Laminado</h2>
+          <p>Delicadeza e brilho em uma única peça. Ideal para compor mixes de colares ou usar sozinho.</p>
+          <p><strong>Preço:</strong> R$ 35,90</p>
+          <a href="colar-laminado.html">Ver detalhes</a>
+        </article>
+        <article>
+          <img src="imagens/gota.jpeg" alt="Brinco dourado em formato de gota">
+          <h2> Brinco Gota</h2>
+          <p> Peça atual e modelo orgânico</p>
+          <p><strong>Preço:</strong> R$ 15,90</p>
+          <a href="brinco-gota.html">Ver detalhes</a>
+        </article>
+        <article>
+          <img src="imagens/diamantado.jpeg" alt="colar dourado em formato de diamante">
+          <h2> Colar diamantado</h2>
+          <p> Peça atual com um toque clássico</p>
+          <p><strong>Preço:</strong> R$ 35,90</p>
+          <a href="colar-diamantado.html">Ver detalhes</a>
+        </article>
+      </section>      
+    </main>
+
+    <footer class="footer">
+      <ul class="footer-links">
+      
+         <li>
+            <a href="https://www.instagram.com/aurorasemijoi.as/">Instagram</a>
+         </li>
+        
+      </ul>
+    </footer>
+
+    <!-- Estrutura do Modal do Carrinho (inicialmente escondido) -->
+    <div id="cart-modal" class="hidden">
+      <div class="cart-content">
+        <button class="close-cart" onclick="toggleCart()">×</button>
+        <h2>Meu Carrinho</h2>
+        <ul id="cart-items-list">
+          <!-- Itens do carrinho serão adicionados aqui pelo JavaScript -->
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      function iniciarBusca() {
+        // 1. Pega o texto digitado pelo usuário, em letras minúsculas.
+        const termoBusca = document.getElementById('campo-busca').value.toLowerCase();
+
+        // 2. Seleciona todos os artigos de produtos.
+        const artigos = document.querySelectorAll('article');
+
+        // 3. Passa por cada artigo para verificar se ele corresponde à busca.
+        artigos.forEach(artigo => {
+          // Pega todo o texto de dentro do artigo, em letras minúsculas.
+          const textoArtigo = artigo.textContent.toLowerCase();
+
+          // 4. Verifica se o texto do artigo inclui o termo da busca.
+          if (textoArtigo.includes(termoBusca)) {
+            // Se incluir, mostra o artigo.
+            artigo.style.display = 'block'; // 'block' é o padrão para <article>
+          } else {
+            // Se não incluir, esconde o artigo.
+            artigo.style.display = 'none';
+          }
+        });
+      }
+
+      // --- LÓGICA DO CARRINHO DE COMPRAS ---
+
+      // Array para guardar os itens do carrinho
+      let cartItems = [];
+
+      const cartModal = document.getElementById('cart-modal');
+      const cartCounter = document.getElementById('cart-counter');
+      const cartItemsList = document.getElementById('cart-items-list');
+
+      // Função para mostrar ou esconder o modal do carrinho
+      function toggleCart() {
+        cartModal.classList.toggle('hidden');
+      }
+
+      // Função para adicionar um item ao carrinho
+      // Esta função será chamada pelos botões nas páginas de produto
+      function addToCart(nome, preco) {
+        cartItems.push({ nome, preco });
+        updateCart();
+        alert(`"${nome}" foi adicionado ao carrinho!`); // Feedback para o usuário
+      }
+
+      // Função para atualizar a exibição do carrinho
+      function updateCart() {
+        // Limpa a lista atual para não duplicar itens
+        cartItemsList.innerHTML = '';
+
+        // Adiciona cada item do array 'cartItems' como um item na lista do modal
+        cartItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = `${item.nome} - R$ ${item.preco}`;
+          cartItemsList.appendChild(li);
+        });
+
+        // Atualiza o contador do ícone do carrinho
+        cartCounter.textContent = cartItems.length;
+      }
+    </script>
+ </body>
+ </html>
